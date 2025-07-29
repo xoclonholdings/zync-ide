@@ -1,0 +1,2 @@
+# zync-ide
+Local IDE 
