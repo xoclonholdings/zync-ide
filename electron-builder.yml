@@ -1,0 +1,48 @@
+appId: com.dev.localide
+productName: Local IDE
+directories:
+  output: release
+  buildResources: build
+files:
+  - "!**/.git"
+  - "!**/.env*"
+  - "!**/node_modules/.cache"
+  - "!**/coverage"
+  - "!**/*.map"
+  - "dist/**/*"
+  - "build/**/*"
+  - "main.js"
+  - "preload.js"
+  - "package.json"
+extraResources:
+  - "server/**/*"
+  - "shared/**/*"
+mac:
+  category: public.app-category.developer-tools
+  target:
+    - target: zip
+      arch: [x64, arm64]
+    - target: dmg
+      arch: [x64, arm64]
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  requestedExecutionLevel: requireAdministrator
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+  category: Development
+publish:
+  - provider: github
+    owner: YOUR_GITHUB_USERNAME
+    repo: local-ide
+    token: ${GITHUB_TOKEN}
+  - provider: generic
+    url: https://your-update-server.com/
+afterSign: scripts/notarize.js
