@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 60%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 0%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: transparent;
+  --input: hsl(0, 0%, 15%);
+  --primary: hsl(45, 100%, 65%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(45, 100%, 65%);
+  --secondary-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(45, 90%, 55%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(45, 100%, 65%);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 60%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 0%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: transparent;
+  --input: hsl(0, 0%, 15%);
+  --primary: hsl(45, 100%, 65%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(45, 100%, 65%);
+  --secondary-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(45, 90%, 55%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(45, 100%, 65%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-0;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', 'Monaco', 'Cascadia Code', monospace !important;
+  }
+
+  h1 {
+    font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+  }
+
+  h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  /* Remove borders and shadows from all components */
+  .card, .input, .button, .tabs, .alert {
+    @apply border-0 shadow-none !important;
+    background: transparent !important;
+  }
+
+  /* Override component borders and focus states */
+  [data-radix-collection-item], 
+  [data-state], 
+  .form-control,
+  input,
+  button,
+  textarea,
+  select {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove focus rings completely */
+  *:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+  }
+}
