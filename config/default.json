@@ -1,0 +1,169 @@
+{
+  "server": {
+    "port": 5000,
+    "host": "0.0.0.0",
+    "cors": {
+      "enabled": true,
+      "origins": ["*"]
+    },
+    "rateLimit": {
+      "enabled": false,
+      "windowMs": 1,
+      "max": 999999999
+    },
+    "bodyLimit": "unlimited",
+    "timeout": 0,
+    "keepAlive": true,
+    "maxConnections": 0
+  },
+  "database": {
+    "type": "sqlite",
+    "path": "./data/zync.db",
+    "sqlite": {
+      "cacheSize": -2000000,
+      "mmapSize": 8589934592,
+      "walAutocheckpoint": 10000,
+      "synchronous": "OFF",
+      "journalMode": "WAL",
+      "tempStore": "memory",
+      "queryTimeout": 0,
+      "maxConnections": "unlimited"
+    },
+    "backup": {
+      "enabled": true,
+      "interval": "1h",
+      "retention": "unlimited",
+      "path": "./data/backups",
+      "compression": true,
+      "parallelBackups": true
+    },
+    "clustering": {
+      "enabled": true,
+      "replication": true,
+      "sharding": true
+    }
+  },
+  "auth": {
+    "jwtSecret": "your-secret-key-change-this",
+    "sessionTimeout": "7d",
+    "maxLoginAttempts": 5,
+    "lockoutDuration": "15m",
+    "requireEmailVerification": false
+  },
+  "storage": {
+    "maxFileSize": "unlimited",
+    "maxProjectSize": "unlimited",
+    "maxProjects": "unlimited",
+    "maxUsers": "unlimited",
+    "allowedFileTypes": ["*"],
+    "compression": {
+      "enabled": true,
+      "algorithm": "gzip",
+      "level": 9
+    },
+    "streaming": {
+      "enabled": true,
+      "chunkSize": "64MB"
+    },
+    "parallelUploads": {
+      "enabled": true,
+      "maxConcurrent": 50
+    }
+  },
+  "integrations": {
+    "fantasmaFirewall": {
+      "enabled": false,
+      "endpoint": "",
+      "apiKey": "",
+      "timeout": 30000
+    },
+    "zebulonOracle": {
+      "enabled": false,
+      "endpoint": "",
+      "apiKey": "",
+      "timeout": 30000
+    }
+  },
+  "features": {
+    "terminal": {
+      "enabled": true,
+      "allowedCommands": ["*"],
+      "maxOutputLines": "unlimited",
+      "maxSessions": "unlimited",
+      "timeout": 0,
+      "rootAccess": true,
+      "sudoEnabled": true
+    },
+    "codeExecution": {
+      "enabled": true,
+      "timeout": 0,
+      "memoryLimit": "unlimited",
+      "cpuLimit": "unlimited",
+      "networkAccess": true,
+      "fileSystemAccess": "full"
+    },
+    "fileWatcher": {
+      "enabled": true,
+      "debounceMs": 50,
+      "maxWatchers": "unlimited",
+      "recursiveDepth": "unlimited"
+    },
+    "multiUser": {
+      "enabled": true,
+      "maxConcurrentUsers": "unlimited",
+      "maxProjectsPerUser": "unlimited"
+    },
+    "realTimeSync": {
+      "enabled": true,
+      "maxConnections": "unlimited",
+      "syncInterval": 10
+    }
+  },
+  "security": {
+    "contentSecurityPolicy": {
+      "enabled": true,
+      "directives": {
+        "defaultSrc": ["'self'"],
+        "scriptSrc": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        "styleSrc": ["'self'", "'unsafe-inline'"],
+        "imgSrc": ["'self'", "data:", "blob:"]
+      }
+    },
+    "helmet": {
+      "enabled": true,
+      "options": {
+        "crossOriginEmbedderPolicy": false
+      }
+    }
+  },
+  "monitoring": {
+    "logging": {
+      "level": "info",
+      "file": "./logs/zync.log",
+      "maxSize": "10MB",
+      "maxFiles": 5
+    },
+    "metrics": {
+      "enabled": true,
+      "interval": "1m"
+    }
+  },
+  "ui": {
+    "theme": {
+      "default": "dark",
+      "allowToggle": true
+    },
+    "branding": {
+      "appName": "Zync",
+      "logoPath": "/assets/logo.svg",
+      "favicon": "/assets/favicon.ico"
+    },
+    "editor": {
+      "defaultLanguage": "javascript",
+      "fontSize": 14,
+      "tabSize": 2,
+      "wordWrap": "on",
+      "minimap": true
+    }
+  }
+}

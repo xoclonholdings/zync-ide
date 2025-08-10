@@ -1,0 +1,170 @@
+1. Auto‑Update Architecture Flow
+Trigger Flow
+
+On app boot, and periodically (e.g., every 10 min), run autoUpdater.checkForUpdatesAndNotify() from electron-updater  .
+
+Metadata Handling
+
+Build step auto-generates .yml metadata (latest.yml, app-update.yml) for each target (mac .zip + dmg, win NSIS, Linux AppImage)  .
+
+Serve Updates
+
+Host release assets & yml on GitHub Releases, S3, or private HTTP endpoint.
+
+Client updater points to that via config/publish in package.json.
+
+Download & Install
+
+electron-updater downloads update in background.
+
+Fires update-available, download-progress, and then update-downloaded events.
+
+On update-downloaded, prompt user, then run autoUpdater.quitAndInstall() to relaunch app  .
+
+OS-Specific Notes
+
+macOS: Zip target required, app signed & notarized; uses Squirrel.Mac  .
+
+Windows: NSIS target preferred; Electron-builder signs & embeds update metadata; Squirrel is deprecated  .
+
+Linux: No built-in auto-update; use AppImage or snap with separate updater  .
+
+🛠️ 2. Permissions & Electron Secure Config
+
+
+Make sure your app is granted:
+
+📡 Network: outbound HTTPS to GitHub/S3/private endpoints.
+
+📁 File System:
+
+Read/write user projects, temp directories, caches.
+
+Access to SSH keys/tokens.
+
+🔑 Secure Storage:
+
+Use keytar (Electron) or OS keychains for secrets.
+
+🔧 Strong Update Permissions:
+
+macOS: Code-signed, .entitlements plist includes allow-unsigned-executable-memory if needed  .
+
+Windows: NSIS installer with requestedExecutionLevel: requireAdministrator.
+
+Linux: If AppImage, ensure AppImageUpdater is included; if using .deb or .snap, manage via apt or snap store.
+
+🧩 3. Boilerplate & Config Snippets
+
+
+package.json (Electron builder config):
+
+"build": {
+  "appId": "com.dev.mypad",
+  "publish": [
+    {"provider":"github","owner":"YOURGH","repo":"your-repo"},
+    {"provider":"generic","url":"https://yourcdn.com/your-app/"}
+  ],
+  "mac": {
+    "target":["zip","dmg"],
+    "hardenedRuntime": true,
+    "entitlements": "build/entitlements.mac.plist"
+  },
+  "win": {
+    "target":"nsis",
+    "requestedExecutionLevel":"requireAdministrator"
+  },
+  "linux": {
+    "target":["AppImage"],
+    "publish":[{"provider":"generic","url":"https://yourcdn.com/"}]
+  }
+}
+build/entitlements.mac.plist sample:
+
+<plist>
+ <dict>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key><true/>
+  <key>com.apple.security.network.client</key><true/>
+  <!-- Add others as needed -->
+ </dict>
+</plist>
+main.js Update Integration:
+
+const { app, BrowserWindow, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
+
+function initAutoUpdater(win){
+  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.on('update-available', () =>
+    dialog.showMessageBox(win,{type:'info',buttons:['Ok'],'message':'Update found; downloading.'})
+  );
+  autoUpdater.on('update-downloaded', () =>
+    dialog.showMessageBox(win,{ type:'info', buttons:['Restart','Later'], message:'Update ready' })
+      .then(r=> r.response===0 && autoUpdater.quitAndInstall())
+  );
+}
+
+app.whenReady().then(()=>{
+  const win = new BrowserWindow({/*...*/});
+  initAutoUpdater(win);
+});
+🔐 4. Secure Secrets & Sync Flow
+Use keytar for storing GitHub tokens, SSH creds.
+
+App can auto-fetch runtime versions or LSP definitions via HTTPS—no hard-coded bundles.
+
+Include periodic refresh logic for definitions/artifacts, stored in a cache/ folder.
+
+Optionally add optional permissions via user prompts (notifications, system tray).
+
+📦 5. Packaging & Release Steps
+Dev branch built via CI: generates .dmg, .zip, .exe, .AppImage, plus metadata.
+
+CI uses electron-builder publish to GitHub/S3.
+
+Uploaded assets available immediately under your publish channel.
+
+Users with running app will auto-check on next startup or interval.
+
+They see prompt → restart → auto-applied patch.
+
+✅ Summary Checklist
+Feature
+
+✅ Included
+
+Auto-update with electron-updater
+
+✓
+
+GitHub/S3 hosting + metadata
+
+✓
+
+Periodic check & user prompt
+
+✓
+
+Windows Admin + macOS entitlements
+
+✓
+
+Linux AppImage flow
+
+✓
+
+File system + network access
+
+✓
+
+Secure key storage
+
+✓
+
+Code signing & notarization
+
+✓
+
+Optional notifications/tray
+
+✓

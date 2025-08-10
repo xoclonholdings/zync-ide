@@ -1,0 +1,31 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "database": {
+    "backup": {
+      "enabled": true,
+      "interval": "12h",
+      "retention": 30
+    }
+  },
+  "auth": {
+    "jwtSecret": "CHANGE_THIS_IN_PRODUCTION",
+    "maxLoginAttempts": 3,
+    "lockoutDuration": "30m"
+  },
+  "monitoring": {
+    "logging": {
+      "level": "warn"
+    }
+  },
+  "security": {
+    "contentSecurityPolicy": {
+      "enabled": true
+    },
+    "helmet": {
+      "enabled": true
+    }
+  }
+}
